@@ -46,15 +46,32 @@ public class ParticipantService {
     }
     public Collection<Participant> getAll(String sortBy, String sortOrder) {
         String hql = "FROM Participant";
+        boolean whereAdded = false;
+
+        //Filtrowanie po loginie
+        String key = null;
+        if (key != null && !key.trim().isEmpty()) {
+            hql += " WHERE login LIKE :key";
+            whereAdded = true;
+        }
+
         // Obsługa tylko sortowania po loginie
         if ("login".equalsIgnoreCase(sortBy)) {
+            hql += " ORDER BY login";
             if ("DESC".equalsIgnoreCase(sortOrder)) {
-                hql += " ORDER BY login DESC";
+                hql += " DESC";
             } else { // domyślnie ASC lub niepoprawna wartość
-                hql += " ORDER BY login ASC";
+                hql += " ASC";
             }
         }
+
         Query query = connector.getSession().createQuery(hql);
+
+        // Przekazanie parametru do zapytania HQL
+        if (key != null && !key.trim().isEmpty()) {
+            query.setParameter("key", "%" + key + "%");
+        }
+
         return query.list();
     }
 }
