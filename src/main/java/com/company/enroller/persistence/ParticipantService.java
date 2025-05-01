@@ -3,14 +3,18 @@ package com.company.enroller.persistence;
 import com.company.enroller.model.Participant;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collection;
 
 @Component("participantService")
 public class ParticipantService {
 
-    DatabaseConnector connector;
+    private DatabaseConnector connector;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public ParticipantService() {
         connector = DatabaseConnector.getInstance();
@@ -33,6 +37,12 @@ public class ParticipantService {
         return participant;
     }
 
+    public void registerParticipant(Participant participant) {
+        String encodedPassword = passwordEncoder.encode(participant.getPassword());
+        participant.setPassword(encodedPassword);
+        add(participant); // dodaj uczestnika do bazy
+    }
+
     public void update(Participant participant) {
         Transaction transaction = connector.getSession().beginTransaction();
         connector.getSession().merge(participant);
@@ -45,34 +55,19 @@ public class ParticipantService {
         transaction.commit();
     }
 
+    // Jeśli chcesz mieć drugą wersję getAll — OK, tylko popraw obsługę key
     public Collection<Participant> getAll(String sortBy, String sortOrder) {
         String hql = "FROM Participant";
-        boolean whereAdded = false;
-
-        //Filtrowanie po loginie
-        String key = null;
-        if (key != null && !key.trim().isEmpty()) {
-            hql += " WHERE lower(login) LIKE :key";
-            whereAdded = true;
-        }
-
-        // Obsługa tylko sortowania po loginie
+        // Możesz dodać tutaj obsługę sortowania, jeśli potrzebujesz
         if ("login".equalsIgnoreCase(sortBy)) {
             hql += " ORDER BY login";
             if ("DESC".equalsIgnoreCase(sortOrder)) {
                 hql += " DESC";
-            } else { // domyślnie ASC lub niepoprawna wartość
+            } else {
                 hql += " ASC";
             }
         }
-
         Query query = connector.getSession().createQuery(hql);
-
-        // Przekazanie parametru do zapytania HQL
-        if (key != null && !key.trim().isEmpty()) {
-            query.setParameter("key", "%" + key.toLowerCase() + "%");
-        }
-
         return query.list();
     }
 }
