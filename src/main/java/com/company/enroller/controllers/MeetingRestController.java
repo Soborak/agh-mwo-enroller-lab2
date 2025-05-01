@@ -38,6 +38,7 @@ public class MeetingRestController {
         return ResponseEntity.ok(meeting);
     }
 
+
     //Endpoint do usuwania spotkania
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMeeting(@PathVariable("id") long id) {
@@ -62,5 +63,5 @@ public class MeetingRestController {
         meetingService.update(meeting);
         return ResponseEntity.ok(meeting);
     }
-    
+
 }

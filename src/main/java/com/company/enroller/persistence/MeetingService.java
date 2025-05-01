@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+
 @Component("meetingService")
 public class MeetingService {
 
@@ -21,6 +22,7 @@ public class MeetingService {
 		Query query = this.session.createQuery(hql);
 		return query.list();
 	}
+
 	// Pobieranie pojedynczego spotkania po ID
 	public Meeting findById(long id) {
 		return session.get(Meeting.class, id);

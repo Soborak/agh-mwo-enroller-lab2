@@ -18,19 +18,15 @@ public class ParticipantRestController {
 	@Autowired
 	ParticipantService participantService;
 
-//	@RequestMapping(value = "", method = RequestMethod.GET)
-//	public ResponseEntity<?> getParticipants() {
-//		Collection<Participant> participants = participantService.getAll();
-//		return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK);
-//	}
 // Endpoint GET z obsługą sortowania po loginie
 @RequestMapping(value = "", method = RequestMethod.GET)
 public ResponseEntity<?> getParticipants(
 		@RequestParam(value = "sortBy", required = false) String sortBy,
 		@RequestParam(value = "sortOrder", required = false) String sortOrder,
-		@RequestParam(value = "key", required = false) String key
-) {
-	Collection<Participant> participants = participantService.getAll(sortBy, sortOrder);
+		@RequestParam(value = "key", required = false) String key)
+
+ {
+	Collection<Participant> participants = participantService.getAll(sortBy, sortOrder, key);
 	return new ResponseEntity<>(participants, HttpStatus.OK);
 }
 

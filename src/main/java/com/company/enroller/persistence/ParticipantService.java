@@ -16,7 +16,7 @@ public class ParticipantService {
         connector = DatabaseConnector.getInstance();
     }
 
-    public Collection<Participant> getAll() {
+    public Collection<Participant> getAll(String sortBy, String sortOrder, String key) {
         String hql = "FROM Participant";
         Query query = connector.getSession().createQuery(hql);
         return query.list();
@@ -44,6 +44,7 @@ public class ParticipantService {
         connector.getSession().delete(participant);
         transaction.commit();
     }
+
     public Collection<Participant> getAll(String sortBy, String sortOrder) {
         String hql = "FROM Participant";
         boolean whereAdded = false;
@@ -51,7 +52,7 @@ public class ParticipantService {
         //Filtrowanie po loginie
         String key = null;
         if (key != null && !key.trim().isEmpty()) {
-            hql += " WHERE login LIKE :key";
+            hql += " WHERE lower(login) LIKE :key";
             whereAdded = true;
         }
 
@@ -69,7 +70,7 @@ public class ParticipantService {
 
         // Przekazanie parametru do zapytania HQL
         if (key != null && !key.trim().isEmpty()) {
-            query.setParameter("key", "%" + key + "%");
+            query.setParameter("key", "%" + key.toLowerCase() + "%");
         }
 
         return query.list();
