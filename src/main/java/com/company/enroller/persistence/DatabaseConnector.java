@@ -2,6 +2,7 @@ package com.company.enroller.persistence;
 
 import org.hibernate.Session;
 
+
 public class DatabaseConnector {
 
 	protected static DatabaseConnector instance = null;

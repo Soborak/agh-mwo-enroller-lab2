@@ -1,22 +1,26 @@
 package com.company.enroller.controllers;
 
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.company.enroller.model.Participant;
 import com.company.enroller.persistence.ParticipantService;
+
 
 @RestController
 @RequestMapping("/participants")
 public class ParticipantRestController {
 
 	@Autowired
-	ParticipantService participantService;
+	//ParticipantService participantService;
+	private ParticipantService participantService;
+
+	@PostMapping("/register")
+	public Participant register(@RequestBody Participant participant) {
+		return participantService.registerParticipant(participant);
+	}
 
 // Endpoint GET z obsługą sortowania po loginie
 @RequestMapping(value = "", method = RequestMethod.GET)

@@ -2,8 +2,8 @@ package com.company.enroller.persistence;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
-
 import java.sql.Types;
+
 
 public class SQLiteDialect extends Dialect {
 
@@ -75,4 +75,5 @@ public class SQLiteDialect extends Dialect {
 	public boolean supportsCascadeDelete() {
 		return false;
 	}
+
 }

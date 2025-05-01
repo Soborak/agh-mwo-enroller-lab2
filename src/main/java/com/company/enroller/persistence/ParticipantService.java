@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collection;
 
+
 @Component("participantService")
+
 public class ParticipantService {
 
     private DatabaseConnector connector;
@@ -37,11 +39,14 @@ public class ParticipantService {
         return participant;
     }
 
-    public void registerParticipant(Participant participant) {
+        public Participant registerParticipant(Participant participant) {
         String encodedPassword = passwordEncoder.encode(participant.getPassword());
         participant.setPassword(encodedPassword);
-        add(participant); // dodaj uczestnika do bazy
-    }
+        Transaction transaction = connector.getSession().beginTransaction();
+        connector.getSession().save(participant);
+        transaction.commit();
+        return participant;
+  }
 
     public void update(Participant participant) {
         Transaction transaction = connector.getSession().beginTransaction();
@@ -70,4 +75,5 @@ public class ParticipantService {
         Query query = connector.getSession().createQuery(hql);
         return query.list();
     }
+
 }

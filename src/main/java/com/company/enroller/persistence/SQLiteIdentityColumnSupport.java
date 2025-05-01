@@ -3,6 +3,7 @@ package com.company.enroller.persistence;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 
+
 public class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
 
     @Override
@@ -19,4 +20,5 @@ public class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
     public String getIdentityColumnString(int type) throws MappingException {
         return "integer";
     }
+
 }
