@@ -33,6 +33,7 @@ public class ParticipantService {
     }
 
     public Participant add(Participant participant) {
+        participant.setPassword(passwordEncoder.encode(participant.getPassword()));
         Transaction transaction = connector.getSession().beginTransaction();
         connector.getSession().save(participant);
         transaction.commit();
